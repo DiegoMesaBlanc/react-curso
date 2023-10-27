@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const PersonForm = ({ setPersons }) => {
+const PersonForm = ({ persons, setPersons }) => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
 
@@ -11,7 +11,7 @@ const PersonForm = ({ setPersons }) => {
       phone: newNumber,
     }
 
-    setPersons(numbersObj)
+    setPersons(persons.concat(numbersObj))
     setNewName('')
     setNewNumber('')
   }

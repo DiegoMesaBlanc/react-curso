@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import Numbers from './Numbers'
-import Filter from './Filter'
-import PersonForm from '../PersonForm'
+import Numbers from './components/Numbers'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -20,7 +20,7 @@ const App = () => {
       <Filter nameFilter={nameFilter} setNameFilter={setNameFilter} />
 
       <h2>add a new</h2>
-      <PersonForm setPersons={setPersons} />
+      <PersonForm persons={persons} setPersons={setPersons} />
 
       <h2>Numbers</h2>
       <Numbers nums={personsToShow} />
