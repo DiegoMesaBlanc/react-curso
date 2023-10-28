@@ -46,7 +46,6 @@ const App = () => {
         ))}
 
       {Object.keys(country).length > 0 ? <DataCountry countryData={country} /> : []}
-
     </div>
   )
 }
