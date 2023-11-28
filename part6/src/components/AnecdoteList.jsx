@@ -1,40 +1,44 @@
 /* eslint-disable react/prop-types */
-import { useDispatch, useSelector } from 'react-redux'
-import { addVotes } from '../reducers/anecdoteReducer'
+
+import { useDispatch, useSelector } from 'react-redux';
+import { addVotes } from '../reducers/anecdoteReducer';
+import { appendNotify } from '../reducers/notificationReducer';
 
 const Anecdote = ({ anecdote, handleClick }) => {
   return (
-    <div>
-      <div>
-        {anecdote.content}
-      </div>
-      <div>
-        has {anecdote.votes}
-        <button onClick={handleClick}>vote</button>
-      </div>
-    </div>
+    <li>
+      {anecdote.content}
+      has {anecdote.votes}
+      <button onClick={handleClick}>vote</button>
+    </li>
   )
 }
+
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
   const anecdotes = useSelector(({ filter, anecdotes }) => {
-    return anecdotes.filter(el => el.content.includes(filter))
+    return filter ? anecdotes.filter(el => el.content.includes(filter)) : anecdotes
   })
+
+  const handleVote = (data) => {
+    dispatch(addVotes(data))
+    dispatch(appendNotify(`you voted '${data.content}'`, 5))
+  }
 
   return (
     <div>
       <h2>Anecdotes</h2>
 
-      {anecdotes.map(anecdote =>
-        <Anecdote
-          key={anecdote.id}
-          anecdote={anecdote}
-          handleClick={() =>
-            dispatch(addVotes(anecdote))
-          }
-        />
-      )}
+      <ul>
+        {anecdotes.map(anecdote =>
+          <Anecdote
+            key={anecdote.id}
+            anecdote={anecdote}
+            handleClick={() => handleVote(anecdote)}
+          />
+        )}
+      </ul>
     </div>
   )
 }
