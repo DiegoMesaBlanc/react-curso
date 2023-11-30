@@ -48,7 +48,7 @@ const App = () => {
   useEffect(() => {
     noteService.getAll()
     personService.getAll()
-  }, [])
+  }, [notes, persons])
 
   const handleNoteSubmit = (event) => {
     event.preventDefault()
