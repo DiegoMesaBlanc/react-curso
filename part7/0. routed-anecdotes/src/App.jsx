@@ -2,6 +2,8 @@
 import { useState } from 'react'
 import { Routes, Route, Link, useMatch, useNavigate } from "react-router-dom"
 import { useField } from './hooks/index_hook'
+import { Nav, Navbar } from 'react-bootstrap'
+import { AppBar, Button, Container, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Toolbar } from '@mui/material'
 
 const padding = {
   paddingRight: 5
@@ -16,21 +18,58 @@ const Menu = ({ anecdotes, addNew }) => {
 
   const match = useMatch('/anecdotes/:id')
   const anecdote = match
-    ? anecdotes.find(note => note.id === Number(match.params.id))
+    ? anecdotes.find(anecdote => anecdote.id === Number(match.params.id))
     : null
 
 
   return (
     <div>
-      <div>
-        <Link style={padding} to="/anecdotes">anecdotes</Link>
-        <Link style={padding} to="/create-new">create new</Link>
-        <Link style={padding} to="/about">about</Link>
-        {user
-          ? <em>{user} logged in</em>
-          : <Link style={padding} to="/login">login</Link>
-        }
-      </div>
+      {/* <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link href="#" as="span">
+              <Link style={padding} to="/">home</Link>
+            </Nav.Link>
+            <Nav.Link href="#" as="span">
+              <Link style={padding} to="/anecdotes">anecdotes</Link>
+            </Nav.Link>
+            <Nav.Link href="#" as="span">
+              <Link style={padding} to="/create-new">create new</Link>
+            </Nav.Link>
+            <Nav.Link href="#" as="span">
+              <Link style={padding} to="/about">about</Link>
+            </Nav.Link>
+            <Nav.Link href="#" as="span">
+              {user
+                ? <em>{user} logged in</em>
+                : <Link to="/login">login</Link>
+              }
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar> */}
+
+      <AppBar position="static">
+        <Toolbar>
+          <Button color="inherit" component={Link} to="/">
+            home
+          </Button>
+          <Button color="inherit" component={Link} to="/notes">
+            notes
+          </Button>
+          <Button color="inherit" component={Link} to="/users">
+            users
+          </Button>
+          {user
+            ? <em>{user} logged in</em>
+            : <Button color="inherit" component={Link} to="/login">
+              login
+            </Button>
+          }
+        </Toolbar>
+      </AppBar>
+
       <Routes>
         <Route path="/anecdotes/:id" element={<Anecdote anecdote={anecdote} />} />
         <Route path="/anecdotes" element={<AnecdoteList anecdotes={anecdotes} />} />
@@ -47,6 +86,7 @@ const Login = (props) => {
   const navigate = useNavigate()
 
   const onSubmit = (event) => {
+
     event.preventDefault()
     props.onLogin('mluukkai')
     navigate('/')
@@ -55,14 +95,35 @@ const Login = (props) => {
   return (
     <div>
       <h2>login</h2>
+      {/* <Form onSubmit={onSubmit}>
+        <Form.Group>
+          <Form.Label>username:</Form.Label>
+          <Form.Control
+            type="text"
+            name="username"
+          />
+          <Form.Label>password:</Form.Label>
+          <Form.Control
+            type="password"
+          />
+          <Button variant="primary" type="submit">
+            login
+          </Button>
+        </Form.Group>
+      </Form> */}
+
       <form onSubmit={onSubmit}>
         <div>
-          username: <input />
+          <TextField label="username" />
         </div>
         <div>
-          password: <input type='password' />
+          <TextField label="password" type='password' />
         </div>
-        <button type="submit">login</button>
+        <div>
+          <Button variant="contained" color="primary" type="submit">
+            login
+          </Button>
+        </div>
       </form>
     </div>
   )
@@ -70,7 +131,7 @@ const Login = (props) => {
 
 const Home = () => (
   <div>
-    <h2>TKTL notes app</h2>
+    <h2>TKTL anecdotes app</h2>
     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
   </div>
 )
@@ -78,22 +139,46 @@ const Home = () => (
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map(anecdote => <Anecdote key={anecdote.id} anecdote={anecdote} />)}
-    </ul>
+    {/* <Table striped>
+      <tbody>
+        {anecdotes.map(anecdote =>
+          <tr key={anecdote.id}>
+            <td>
+              <Link to={`/anecdotes/${anecdote.id}`}>
+                {anecdote.content}
+              </Link>
+            </td>
+            <td>
+              {anecdote.user}
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </Table> */}
+
+    <TableContainer component={Paper}>
+      <Table>
+        <TableBody>
+          {anecdotes.map(note => (
+            <TableRow key={note.id}>
+              <TableCell>
+                <Link to={`/anecdotes/${note.id}`}>{note.content}</Link>
+              </TableCell>
+              <TableCell>
+                {note.name}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   </div>
 )
 
 const Anecdote = ({ anecdote }) => {
-  const navigate = useNavigate()
-
-  const handleNavigate = (anec) => {
-    navigate(`/anecdotes/${anec.id}`)
-  }
-
   return (
     <div>
-      <li onClick={() => handleNavigate(anecdote)}>{anecdote.content}</li>
+      <li>{anecdote.content}</li>
     </div>
   )
 }
@@ -121,9 +206,9 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const content = useField('text')
-  const author = useField('text')
-  const info = useField('text')
+  const { reset: resetContent, ...content } = useField('text')
+  const { reset: resetAuthor, ...author } = useField('text')
+  const { reset: resetInfo, ...info } = useField('text')
   const navigate = useNavigate()
 
 
@@ -140,9 +225,10 @@ const CreateNew = (props) => {
   }
 
   const clearFields = () => {
-    content.reset()
-    author.reset()
-    info.reset()
+    console.log(content);
+    resetContent()
+    resetAuthor()
+    resetInfo()
   }
 
   return (
@@ -208,14 +294,13 @@ const App = () => {
   // }
 
   return (
-    <div className='container'>
-      <h1>Software anecdotes</h1>
+    <Container>
       <Menu anecdotes={anecdotes} addNew={addNew} />
 
       <br /> <br />
 
       <Footer />
-    </div>
+    </Container>
   )
 }
 
