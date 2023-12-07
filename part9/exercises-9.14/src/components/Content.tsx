@@ -11,13 +11,17 @@ const Content = ({ parts }: { parts: CoursePart[] }) => {
               <strong>{part.name} {part.exerciseCount}</strong>
             </p>
 
-            <p>
-              <em>{part.description}</em>
-            </p>
+            {part.kind !== 'group' ?
+              <p>
+                <em>{part.description}</em>
+              </p>
+              : null}
 
-            <p>
-              <em>{part.backgroundMaterial}</em>
-            </p>
+            {part.kind === 'background' ?
+              <p>
+                <em>{part.backgroundMaterial}</em>
+              </p>
+              : null}
           </div>
         ))
       }

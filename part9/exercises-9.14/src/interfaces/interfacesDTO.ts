@@ -1,13 +1,10 @@
 interface CoursePartBase {
   name: string;
   exerciseCount: number;
+  description?: string;
 }
 
-interface CoursePartDescription extends CoursePartBase {
-  description: string;
-}
-
-interface CoursePartBasic extends CoursePartDescription {
+interface CoursePartBasic extends CoursePartBase {
   kind: "basic"
 }
 
@@ -16,9 +13,10 @@ interface CoursePartGroup extends CoursePartBase {
   kind: "group"
 }
 
-interface CoursePartBackground extends CoursePartDescription {
+interface CoursePartBackground extends CoursePartBase {
+  description: string;
   backgroundMaterial: string;
   kind: "background"
 }
 
-export type CoursePart = CoursePartDescription | CoursePartBasic | CoursePartGroup | CoursePartBackground;
+export type CoursePart = CoursePartBackground | CoursePartGroup | CoursePartBasic;
